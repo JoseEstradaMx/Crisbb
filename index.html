@@ -1,13 +1,160 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title><3</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Be My Valentine?</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+
+        body {
+            background-color: #ffe6e6; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Patrick Hand', cursive;
+            overflow: hidden;
+            overscroll-behavior: none; 
+        }
+
+        /* La tarjeta ahora gestiona todo el espacio interno */
+        .card {
+            background-color: white;
+            width: 320px;
+            height: 420px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative; 
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-top: 60px;
+            line-height: 1.2;
+            color: #333;
+            position: relative;
+            z-index: 10;
+        }
+
+        .btn {
+            font-size: 1.8rem;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            color: inherit;
+            
+            /* Ajustes para Safari/iOS */
+            -webkit-appearance: none; 
+            -webkit-tap-highlight-color: transparent; 
+            outline: none;
+            user-select: none; 
+            -webkit-user-select: none;
+            touch-action: manipulation; 
+
+            /* CRUCIAL: Posicionamiento absoluto desde el inicio */
+            position: absolute;
+        }
+
+        /* Posiciones iniciales fijas */
+        #btn-yes {
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%); /* Lo mantiene centrado perfectamente */
+            z-index: 20;
+        }
+
+        #btn-no {
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: top 0.2s ease, left 0.2s ease;
+            z-index: 100;
+        }
+
+        .checkbox {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 25px;
+            height: 25px;
+            border: 2px solid #000;
+            margin-left: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .heart {
+            position: absolute;
+            color: #e74c3c;
+            font-size: 1.5rem;
+            user-select: none;
+            -webkit-user-select: none;
+            z-index: 5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card" id="valentine-card">
+        <div class="heart" style="top: 20px; left: 20px; transform: rotate(-15deg);">❤</div>
+        <div class="heart" style="bottom: 20px; right: 20px; transform: rotate(15deg);">❤</div>
         
-    </body>
-    <script type="text/javascript">
-        alert("tqm Cris");
+        <h1>WILL YOU<br>BE MY<br>VALENTINE?</h1>
+        
+        <button id="btn-yes" class="btn">
+            YES <span class="checkbox" id="check-yes"></span>
+        </button>
+        
+        <button id="btn-no" class="btn">
+            NO &nbsp;<span class="checkbox"></span>
+        </button>
+    </div>
+
+    <script>
+        const btnYes = document.getElementById('btn-yes');
+        const btnNo = document.getElementById('btn-no');
+        const checkYes = document.getElementById('check-yes');
+        const card = document.getElementById('valentine-card'); 
+
+        btnYes.addEventListener('click', () => {
+            checkYes.innerText = 'X'; 
+            setTimeout(() => {
+                alert("¡Sabía que dirías que sí! ❤️ Te amo Cris ");
+            }, 100);
+        });
+
+        function moveButton() {
+            // Anulamos el transform inicial para que el left/top tengan el control total
+            btnNo.style.transform = 'none'; 
+            
+            const cardWidth = card.clientWidth;
+            const cardHeight = card.clientHeight;
+            
+            const maxX = cardWidth - btnNo.offsetWidth;
+            const maxY = cardHeight - btnNo.offsetHeight;
+
+            // Mantener un margen interno de 15px para que no toque los bordes
+            const randomX = Math.max(15, Math.random() * (maxX - 15));
+            const randomY = Math.max(15, Math.random() * (maxY - 15));
+
+            btnNo.style.left = `${randomX}px`;
+            btnNo.style.top = `${randomY}px`;
+        }
+
+        // Múltiples escuchadores para asegurar la reacción en cualquier dispositivo
+        btnNo.addEventListener('mouseover', moveButton);
+        btnNo.addEventListener('touchstart', (e) => {
+            e.preventDefault(); 
+            moveButton();
+        }, { passive: false });
     </script>
+</body>
 </html>
